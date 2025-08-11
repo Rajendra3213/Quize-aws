@@ -23,6 +23,8 @@ python seed_questions.py
 # Setup frontend
 cd ../frontend
 npm install
+# Clear Next.js cache and rebuild
+rm -rf .next
 npm run build
 
 # Create systemd services
@@ -56,6 +58,7 @@ ExecStart=/usr/bin/npm start
 Restart=always
 Environment=NODE_ENV=production
 Environment=PORT=3000
+Environment=NEXT_TELEMETRY_DISABLED=1
 
 [Install]
 WantedBy=multi-user.target
@@ -80,7 +83,11 @@ server {
         proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection 'upgrade';
         proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
         proxy_cache_bypass \$http_upgrade;
+        proxy_read_timeout 86400;
     }
 
     location /api/ {

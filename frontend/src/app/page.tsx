@@ -4,7 +4,7 @@ import axios from 'axios'
 import jsPDF from 'jspdf'
 import toast, { Toaster } from 'react-hot-toast'
 
-const API_BASE = 'http://localhost:8000'
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 const QUIZ_TIME = 70 * 60 * 1000 // 70 minutes in milliseconds
 
 interface QuestionState {
